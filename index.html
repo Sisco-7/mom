@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mom’s Cosmic Birthday Bash</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Orbitron', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #0d001a, #000);
+            overflow: hidden;
+            position: relative;
+            perspective: 1000px;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ffcc00, #ff0066);
+            opacity: 0.15;
+            animation: cosmicShift 12s infinite linear;
+            z-index: -3;
+            transform: rotateX(20deg);
+        }
+        .stage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: stageSpin 20s infinite linear;
+            z-index: -2;
+        }
+        .stage-ring {
+            position: absolute;
+            width: clamp(150px, 50vw, 600px);
+            height: clamp(150px, 50vw, 600px);
+            border: 4px dashed #ff00ff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(70deg);
+            box-shadow: 0 0 40px #00ffff;
+            animation: ringPulse 2s infinite;
+        }
+        @keyframes stageSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        @keyframes ringPulse {
+            0% { transform: translate(-50%, -50%) rotateX(70deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotateX(70deg) scale(1.1); }
+            100% { transform: translate(-50%, -50%) rotateX(70deg) scale(1); }
+        }
+        @keyframes cosmicShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: clamp(15px, 5vw, 80px);
+            border-radius: clamp(30px, 8vw, 100px);
+            box-shadow: 0 0 60px #ff0066, inset 0 0 40px rgba(0, 255, 255, 0.4);
+            text-align: center;
+            width: 90%;
+            max-width: 1200px;
+            border: clamp(2px, 0.4vw, 5px) solid #ffcc00;
+            position: relative;
+            z-index: 2;
+            transform: rotateX(10deg) translateZ(50px);
+            animation: cosmicLift 2s infinite ease-in-out;
+        }
+        @keyframes cosmicLift {
+            0% { transform: rotateX(10deg) translateZ(50px) scale(1); }
+            50% { transform: rotateX(10deg) translateZ(80px) scale(1.05); }
+            100% { transform: rotateX(10deg) translateZ(50px) scale(1); }
+        }
+        h1 {
+            color: #ff00ff;
+            font-size: clamp(1.5em, 5vw, 5em);
+            margin-bottom: clamp(15px, 3vw, 40px);
+            text-shadow: 0 0 25px #ffcc00, 0 0 50px #00ffff;
+            animation: titleBlast 1.8s infinite;
+        }
+        @keyframes titleBlast {
+            0% { transform: translateZ(0) scale(1); }
+            50% { transform: translateZ(20px) scale(1.1); }
+            100% { transform: translateZ(0) scale(1); }
+        }
+        #compliment {
+            font-size: clamp(0.9em, 3.5vw, 2.5em);
+            color: #ffcc00;
+            margin: clamp(15px, 3vw, 40px) 0;
+            min-height: clamp(50px, 12vw, 100px);
+            opacity: 0;
+            transform: translateZ(-100px) rotateX(-90deg);
+            transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            text-shadow: 0 0 15px #ff0066;
+            line-height: 1.2;
+            padding: 0 10px;
+        }
+        #compliment.show {
+            opacity: 1;
+            transform: translateZ(0) rotateX(0deg);
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(8px, 1.5vw, 20px);
+            justify-content: center;
+            padding: 0 clamp(5px, 2vw, 20px);
+        }
+        button {
+            padding: clamp(10px, 2.5vw, 20px) clamp(15px, 3vw, 40px);
+            background: linear-gradient(45deg, #ff0066, #00ffff);
+            color: #fff;
+            border: clamp(1px, 0.2vw, 3px) solid #ffcc00;
+            border-radius: clamp(25px, 6vw, 60px);
+            font-size: clamp(0.7em, 2vw, 1.6em);
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff00ff;
+            transition: all 0.4s ease;
+            flex: 1 1 clamp(100px, 22vw, 300px);
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+            animation: btnGlow 1.5s infinite;
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7), transparent);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        button:hover::before {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+        button:hover {
+            background: linear-gradient(45deg, #00ffff, #ff0066);
+            transform: translateZ(15px) scale(1.1);
+            box-shadow: 0 0 40px #00ffff;
+        }
+        @keyframes btnGlow {
+            0% { box-shadow: 0 0 20px #ff00ff; }
+            50% { box-shadow: 0 0 35px #00ffff; }
+            100% { box-shadow: 0 0 20px #ff00ff; }
+        }
+        #share-btn { background: linear-gradient(45deg, #ffcc00, #ff6600); }
+        #share-btn:hover { background: linear-gradient(45deg, #ff6600, #ffcc00); }
+        #auto-btn { background: linear-gradient(45deg, #00ff99, #ff00ff); }
+        #auto-btn:hover { background: linear-gradient(45deg, #ff00ff, #00ff99); }
+        #music-btn { background: linear-gradient(45deg, #ff0066, #ffcc00); }
+        #music-btn:hover { background: linear-gradient(45deg, #ffcc00, #ff0066); }
+        #favorite-btn { background: linear-gradient(45deg, #ff00cc, #ffcc00); }
+        #favorite-btn:hover { background: linear-gradient(45deg, #ffcc00, #ff00cc); }
+        #counter, #favorites {
+            font-size: clamp(0.7em, 2vw, 1.6em);
+            color: #00ffff;
+            margin-top: clamp(10px, 2vw, 30px);
+            text-shadow: 0 0 15px #ff00ff;
+            padding: 0 10px;
+        }
+        #favorites {
+            display: none;
+            padding: clamp(8px, 1.5vw, 20px);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            max-height: clamp(80px, 20vw, 150px);
+            overflow-y: auto;
+        }
+        .volume-control {
+            margin-top: clamp(10px, 2vw, 30px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 10px;
+        }
+        #volume-slider {
+            width: clamp(80px, 18vw, 200px);
+            accent-color: #ff00ff;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        #confetti-canvas { z-index: 2; }
+
+        @media (max-width: 480px) {
+            .container { padding: clamp(10px, 4vw, 20px); width: 95%; }
+            .button-group { flex-direction: column; gap: 8px; }
+            button { flex: 1 1 100%; padding: clamp(8px, 2vw, 15px) clamp(10px, 2.5vw, 20px); }
+            #favorites { max-height: 80px; }
+        }
+        @media (min-width: 481px) and (max-width: 768px) {
+            .button-group { flex-wrap: wrap; gap: 10px; }
+            button { flex: 1 1 45%; }
+        }
+        @media (min-width: 769px) {
+            .button-group { gap: 15px; }
+            button { flex: 1 1 20%; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cosmic-bg"></div>
+    <div class="stage">
+        <div class="stage-ring"></div>
+    </div>
+    <canvas id="fireworks"></canvas>
+    <canvas id="confetti-canvas"></canvas>
+    <div class="container">
+        <h1>Mom’s Cosmic Birthday Bash</h1>
+        <div id="compliment">Launch the Birthday Vibes!</div>
+        <div class="button-group">
+            <button id="generate-btn" onclick="generateCompliment()">Blast a Compliment</button>
+            <button id="share-btn" onclick="shareCompliment()">Share the Cosmos</button>
+            <button id="auto-btn" onclick="toggleAuto()">Auto Blast: Off</button>
+            <button id="music-btn" onclick="toggleMusic()">Cosmic Beats: Off</button>
+            <button id="favorite-btn" onclick="saveFavorite()">Save Favorite</button>
+        </div>
+        <div class="volume-control">
+            <label for="volume-slider">Volume:</label>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+        </div>
+        <div id="counter">Compliments Launched: 0</div>
+        <div id="favorites"></div>
+    </div>
+
+    <script>
+        const compliments = [
+            "Mom, you’re the supernova that lights up my galaxy!",
+            "Happy birthday to the cosmic queen of my universe!",
+            "Your love is a meteor shower—explosive and stunning!",
+            "Mom, you’re the starship that rockets my world!",
+            "You’re a planetary powerhouse—unstoppable, Mom!",
+            "Your smile’s a solar flare—blazing and bright!",
+            "Mom, you’re the orbit that keeps me spinning!",
+            "Happy birthday to my interstellar inspiration!",
+            "You’re the cosmic heartbeat of our family, Mom!",
+            "Mom, your vibes are out-of-this-world epic!"
+        ];
+
+        const complimentDiv = document.getElementById("compliment");
+        const counterDiv = document.getElementById("counter");
+        const autoBtn = document.getElementById("auto-btn");
+        const musicBtn = document.getElementById("music-btn");
+        const favoritesDiv = document.getElementById("favorites");
+        const volumeSlider = document.getElementById("volume-slider");
+        let currentCompliment = "";
+        let complimentCount = 0;
+        let autoInterval = null;
+        let favorites = [];
+        const audio = new Audio("https://www.freesound.org/data/previews/270/270318_2018099-lq.mp3");
+        audio.loop = true;
+        let isMusicPlaying = false;
+
+        audio.volume = volumeSlider.value;
+        volumeSlider.addEventListener("input", () => {
+            audio.volume = volumeSlider.value;
+        });
+
+        function generateCompliment(auto = false) {
+            complimentDiv.classList.remove("show");
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * compliments.length);
+                currentCompliment = compliments[randomIndex];
+                complimentDiv.textContent = currentCompliment;
+                complimentDiv.classList.add("show");
+                if (!auto) {
+                    complimentCount++;
+                    counterDiv.textContent = `Compliments Launched: ${complimentCount}`;
+                    if (isMusicPlaying) audio.play().catch(() => console.log("Audio blocked"));
+                    triggerFireworks();
+                    triggerConfetti();
+                }
+            }, 1000);
+        }
+
+        function shareCompliment() {
+            if (currentCompliment && navigator.share) {
+                navigator.share({
+                    title: "Mom’s Cosmic Birthday Bash",
+                    text: currentCompliment,
+                    url: window.location.href
+                }).catch(() => alert("Cosmic share failed—copy it!"));
+            } else {
+                navigator.clipboard.writeText(currentCompliment)
+                    .then(() => alert("Copied: " + currentCompliment))
+                    .catch(() => alert("Blast this: " + currentCompliment));
+            }
+        }
+
+        function toggleAuto() {
+            if (autoInterval) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+                autoBtn.textContent = "Auto Blast: Off";
+            } else {
+                autoInterval = setInterval(() => generateCompliment(true), 3000);
+                autoBtn.textContent = "Auto Blast: On";
+            }
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audio.pause();
+                musicBtn.textContent = "Cosmic Beats: Off";
+            } else {
+                audio.play();
+                musicBtn.textContent = "Cosmic Beats: On";
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function saveFavorite() {
+            if (currentCompliment && !favorites.includes(currentCompliment)) {
+                favorites.push(currentCompliment);
+                updateFavorites();
+            }
+        }
+
+        function updateFavorites() {
+            if (favorites.length > 0) {
+                favoritesDiv.style.display = "block";
+                favoritesDiv.innerHTML = "<strong>Favorite Compliments:</strong><br>" + favorites.join("<br>");
+            } else {
+                favoritesDiv.style.display = "none";
+            }
+        }
+
+        // Fireworks Effect
+        const fireworksCanvas = document.getElementById("fireworks");
+        const fwCtx = fireworksCanvas.getContext("2d");
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+        const fireworks = [];
+        const fireworkColors = ["#ff00ff", "#00ffff", "#ffcc00", "#ff0066", "#00ff99"];
+
+        function Firework(x = null) {
+            this.x = x !== null ? x : Math.random() * fireworksCanvas.width;
+            this.y = fireworksCanvas.height;
+            this.targetY = Math.random() * fireworksCanvas.height * 0.5;
+            this.speed = Math.random() * 5 + 5;
+            this.color = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            this.size = Math.random() * 4 + 2;
+            this.exploded = false;
+            this.particles = [];
+        }
+
+        Firework.prototype.update = function() {
+            if (!this.exploded) {
+                this.y -= this.speed;
+                if (this.y <= this.targetY) {
+                    this.exploded = true;
+                    for (let i = 0; i < 60; i++) {
+                        this.particles.push(new Particle(this.x, this.y, this.color));
+                    }
+                }
+            }
+        };
+
+        Firework.prototype.draw = function() {
+            if (!this.exploded) {
+                fwCtx.fillStyle = this.color;
+                fwCtx.beginPath();
+                fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                fwCtx.fill();
+            }
+        };
+
+        function Particle(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.speed = Math.random() * 4 + 2;
+            this.angle = Math.random() * Math.PI * 2;
+            this.life = Math.random() * 50 + 30;
+            this.color = color;
+            this.size = Math.random() * 3 + 2;
+        }
+
+        Particle.prototype.update = function() {
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+            this.speed *= 0.95;
+            this.life--;
+            this.size *= 0.98;
+        };
+
+        Particle.prototype.draw = function() {
+            fwCtx.globalAlpha = this.life / 50;
+            fwCtx.fillStyle = this.color;
+            fwCtx.beginPath();
+            fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            fwCtx.fill();
+        };
+
+        function triggerFireworks(x = null) {
+            for (let i = 0; i < 5; i++) {
+                fireworks.push(new Firework(x));
+            }
+            animateFireworks();
+        }
+
+        function animateFireworks() {
+            fwCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+            fireworks.forEach((fw, index) => {
+                if (!fw.exploded) {
+                    fw.update();
+                    fw.draw();
+                } else {
+                    fw.particles.forEach((p, pIndex) => {
+                        p.update();
+                        p.draw();
+                        if (p.life <= 0) fw.particles.splice(pIndex, 1);
+                    });
+                    if (fw.particles.length === 0) fireworks.splice(index, 1);
+                }
+            });
+            if (fireworks.length > 0) requestAnimationFrame(animateFireworks);
+        }
+
+        // Confetti Effect
+        const confettiCanvas = document.getElementById("confetti-canvas");
+        const cfCtx = confettiCanvas.getContext("2d");
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+        const confetti = [];
+
+        function Confetti() {
+            this.x = Math.random() * confettiCanvas.width;
+            this.y = -10;
+            this.size = Math.random() * 10 + 5;
+            this.speed = Math.random() * 5 + 2;
+            this.color = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            this.angle = Math.random() * Math.PI * 2;
+        }
+
+        Confetti.prototype.update = function() {
+            this.y += this.speed;
+            this.x += Math.sin(this.angle) * 2;
+            this.angle += 0.1;
+            if (this.y > confettiCanvas.height) {
+                this.y = -10;
+                this.x = Math.random() * confettiCanvas.width;
+            }
+        };
+
+        Confetti.prototype.draw = function() {
+            cfCtx.save();
+            cfCtx.translate(this.x, this.y);
+            cfCtx.rotate(this.angle);
+            cfCtx.fillStyle = this.color;
+            cfCtx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+            cfCtx.restore();
+        };
+
+        function triggerConfetti() {
+            for (let i = 0; i < 50; i++) {
+                confetti.push(new Confetti());
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            cfCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confetti.forEach((c, index) => {
+                c.update();
+                c.draw();
+                if (c.y > confettiCanvas.height) confetti.splice(index, 1);
+            });
+            if (confetti.length > 0) requestAnimationFrame(animateConfetti);
+        }
+
+        // Interactive Fireworks
+        document.body.addEventListener("click", (e) => {
+            triggerFireworks(e.clientX);
+        });
+        document.body.addEventListener("touchstart", (e) => {
+            triggerFireworks(e.touches[0].clientX);
+        });
+
+        window.addEventListener("resize", () => {
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        });
+
+        // Initial blast
+        triggerFireworks();
+    </script>
+</body>
+</html>
